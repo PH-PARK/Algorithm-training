@@ -1,14 +1,16 @@
 #include <stdio.h>
-#include <stdint.h>
 
 #define maxLen 50
 #define minLen 2
 
-int getString(char *buf);
-int checkSting(char *buf);
+//int getString(char *buf);
+//int checkString(char *buf);
 
-char string[maxLen];
-uint8_t NumofData;
+typedef char element;
+element stack[maxLen];
+
+int NumofData;
+int top = -1;
 
 int main()
 {
@@ -17,39 +19,80 @@ int main()
 	//puts("How many VPS?: ");
 	scanf_s("%d", &NumofData);
 
-	for (i = NumofData; i > 0 ; i--)
+	for (i = NumofData; i > 0; i--)
 	{
-		if (getSting(string) == 1)
-		{
-			puts("String input failed.");
-
-			return 1;
-		}
-
-		if (checkString(string) == 1)
-		{
-			puts("YES");
-		}
-		else if (checkString(string) == 0)
-		{
-			puts("NO");
-		}
-		else
-		{
-			puts("Something wrong...");
-			return 1;
-		}
+		
 	}
+
+	puts("종료합니다.");
+	scanf_s("%d", &NumofData);
 
 	return 0;
 }
 
+void push(char item)
+{
+
+}
+
+char pop(void)
+{
+
+	return 
+}
+/*
 int getString(char *buf)
 {
-	
+	char temp;
+	int i;
+
+	for (i = 0; i < maxLen; i++ )
+	{
+		temp = getchar();
+
+		if (temp == '\n')
+		{
+			buf[i] = '\0';
+			return 0;
+		}
+	}
+
+	return 1;
+
 }
 
-int checkSting(char *buf)
+int checkString(char *buf)
 {
+	char temp;
+	int i;
+	int j=0;
 
-}
+	for (i = 0; i < maxLen; i++ )
+	{
+		temp = buf[i];
+		if (temp == 72)
+		{
+			i++;
+		}
+		else if (temp == 73)
+		{
+			i--;
+			j++;
+		}
+		if (temp = '\n')
+		{
+			if (i == 0 && j!=0)
+			{
+			
+				return 1;
+			}
+			else if(i != 0)
+			{
+
+				return 0;
+			}
+		}
+	}
+
+	return 0;
+}*/
