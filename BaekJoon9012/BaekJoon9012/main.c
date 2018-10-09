@@ -16,12 +16,12 @@ int top = -1;
 
 int main()
 {
-	int i;
+	int i, j;
 	int NumOfTest;
-	element tem;
+	char tem = 0;
 
 #ifdef __DEBUG__
-	puts("How many VPS?: ");
+	printf("How many VPS?: ");
 #endif
 
 
@@ -30,60 +30,75 @@ int main()
 #elif __linux__
 	scanf("%d", &NumofData);
 #endif
-
 	for (i = 0; i < NumOfTest; i++)
 	{
-		getchar(tem);
-
-		if (tem == "(") {
 #ifdef __DEBUG__
-			puts("Passed if (tem == \"(\"");
+		printf("NumOfTest : %d\n", NumOfTest);
 #endif
-			push(tem);
-
-		}
-		else if (tem == ")")
+		for (j = 0; j < maxLen; j++)
 		{
+			tem=getchar();
 #ifdef __DEBUG__
-			puts("Passed if (tem == \")\"");
+			printf("tem : %c\n", tem);
 #endif
-			if (is_empty == 1) 
+			if (tem == "(") 
 			{
+#ifdef __DEBUG__
+				puts("Passed if (tem == \"(\"");
+#endif
+				push(tem);
 
+			}
+
+			else if (tem == ")")
+			{
+#ifdef __DEBUG__
+				puts("Passed if (tem == \")\"");
+#endif
+				if (is_empty == 1)
+				{
+					puts("NO");
+					break; //Failed this time.
+				}
+				else
+				{
+					pop();
+				}
+			}
+
+			else if (tem == '\n')
+			{
+				if (is_empty() == 1)
+				{
+					puts("YES");
+				}
+				else
+				{
+					puts("NO");
+				}
+				break;
 			}
 			else
 			{
-				pop();
+				puts("Wrong Char");
+				break;
 			}
-		else if (tem == '\n')
-		{
 
-		}
-		}
+			}//end of for(j<maxLen)
 #ifdef __DEBUG__
-	puts("Entering Finished.");
-	puts("Start Checking.");
+		puts("One loop is done.");
 #endif
-	if (is_empty() == 1) 
-	{
-		puts("YES");
-	}
-	else
-	{
-		puts("NO");
-	}
 
-
-	}//end of for
-
-
-	
+		}//end of for(i<NumOfTest)
 
 	puts("종료합니다.");
 	system("pause");
 
 	return 0;
-}
+
+	}//end of main
+
+
 
 void CheckMatching(void)
 {
