@@ -1,5 +1,6 @@
 #include <stdio.h>
-	
+#include <stdint.h>
+
 #define __DEBUG__
 #define maxLen 50
 #define minLen 2
@@ -17,6 +18,7 @@ int top = -1;
 int main()
 {
 	int i, j;
+	uint8_t input_flag = 0;
 	int NumOfTest;
 	char tem = 0;
 
@@ -37,6 +39,7 @@ int main()
 #endif
 		for (j = 0; j < maxLen; j++)
 		{
+			fflush(stdout);
 			tem=getchar();
 #ifdef __DEBUG__
 			printf("tem : %c\n", tem);
@@ -46,6 +49,7 @@ int main()
 #ifdef __DEBUG__
 				puts("Passed if (tem == \"(\"");
 #endif
+				input_flag = 1;
 				push(tem);
 
 			}
@@ -70,11 +74,20 @@ int main()
 			{
 				if (is_empty() == 1)
 				{
-					puts("YES");
+					if (input_flag == 1)
+					{
+						puts("YES");
+					}
+					else
+					{
+						puts("NO");
+						break;
+					}
 				}
 				else
 				{
 					puts("NO");
+					break;
 				}
 				break;
 			}
@@ -88,7 +101,8 @@ int main()
 #ifdef __DEBUG__
 		puts("One loop is done.");
 #endif
-
+		ClearStack();
+		input_flag = 0;
 		}//end of for(i<NumOfTest)
 
 	puts("종료합니다.");
