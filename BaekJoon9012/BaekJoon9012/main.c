@@ -24,7 +24,6 @@ int main()
 	int i, j;
 	char string[maxLen];
 	int NumOfTest;
-	char tem = 0;
 
 #ifdef __DEBUG__
 	printf("How many VPS?: ");
@@ -34,7 +33,7 @@ int main()
 #ifdef _WIN32
 	scanf_s(" %d", &NumOfTest);
 #elif __linux__
-	scanf(" %d", &NumofData);
+	scanf(" %d", &NumOfTest);
 #endif
 	for (i = 0; i < NumOfTest; i++)
 	{
@@ -42,10 +41,10 @@ int main()
 		printf("NumOfTest : %d, i : %d\n", NumOfTest, i);
 #endif
 
-		for (j = 0; j < maxLen; j++)
-		{
+		//for (j = 0; j < maxLen; j++)
+		//{
 			while (getchar() != '\n'); //Clear Buffer
-			scanf("%s",string,maxLen);
+			scanf("%s",string);
 #ifdef __DEBUG__
 			printf("String is : %s\n", string);
 			puts("Start Checking");
@@ -58,13 +57,13 @@ int main()
 #endif
 			ClearStack();
 
-		}//end of for(j<MaxLen)
+		//}//end of for(j<MaxLen)
 
 	}//end of for(i<NumofTest)
-
+#ifdef __DEBUG__
 	puts("종료합니다.");
 	system("pause");
-
+#endif
 	return 0;
 }
 
