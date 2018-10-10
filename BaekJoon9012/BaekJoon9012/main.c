@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <assert.h>
 
 #define __DEBUG__
 #define maxLen 50
@@ -9,16 +10,18 @@ void push(char);
 char pop(void);
 int is_empty(void);
 int is_full(void);
+int CheckMatching(element* buf);
 void ClearStack(void);
 
 typedef char element;
+
 element stack[maxLen];
 int top = -1;
 
 int main()
 {
 	int i, j;
-	uint8_t input_flag = 0;
+	element string[maxLen];
 	int NumOfTest;
 	char tem = 0;
 
@@ -28,105 +31,47 @@ int main()
 
 
 #ifdef _WIN32
-	scanf_s("%d", &NumOfTest);
+	scanf_s(" %d", &NumOfTest);
 #elif __linux__
-	scanf("%d", &NumofData);
+	scanf(" %d", &NumofData);
 #endif
 	for (i = 0; i < NumOfTest; i++)
 	{
 #ifdef __DEBUG__
-		printf("NumOfTest : %d\n", NumOfTest);
+		printf("NumOfTest : %d, i : %d\n", NumOfTest, i);
 #endif
+
 		for (j = 0; j < maxLen; j++)
 		{
-			fflush(stdout);
-			tem=getchar();
+			//	fflush(stdout);
+			scanf_s(" %s", string);
 #ifdef __DEBUG__
-			printf("tem : %c\n", tem);
+			printf("sting is : %s", string);
 #endif
-			if (tem == "(") 
-			{
+
+			CheckMatching(string);
+
 #ifdef __DEBUG__
-				puts("Passed if (tem == \"(\"");
+			puts("One loop is done.");
+
 #endif
-				input_flag = 1;
-				push(tem);
+			ClearStack();
 
-			}
+		}//end of for(j<MaxLen)
 
-			else if (tem == ")")
-			{
-#ifdef __DEBUG__
-				puts("Passed if (tem == \")\"");
-#endif
-				if (is_empty == 1)
-				{
-					puts("NO");
-					break; //Failed this time.
-				}
-				else
-				{
-					pop();
-				}
-			}
-
-			else if (tem == '\n')
-			{
-				if (is_empty() == 1)
-				{
-					if (input_flag == 1)
-					{
-						puts("YES");
-					}
-					else
-					{
-						puts("NO");
-						break;
-					}
-				}
-				else
-				{
-					puts("NO");
-					break;
-				}
-				break;
-			}
-			else
-			{
-				puts("Wrong Char");
-				break;
-			}
-
-			}//end of for(j<maxLen)
-#ifdef __DEBUG__
-		puts("One loop is done.");
-#endif
-		ClearStack();
-		input_flag = 0;
-		}//end of for(i<NumOfTest)
+	}//end of for(i<NumofTest)
 
 	puts("종료합니다.");
 	system("pause");
 
 	return 0;
-
-	}//end of main
-
-
-
-void CheckMatching(void)
-{
-	char tem;
-
-	tem = pop();
-
-
-	return;
 }
+
 
 void push(char item)
 {
 	
+	assert(!is_full());
 
 	stack[++top] = item;
 
@@ -135,6 +80,7 @@ void push(char item)
 
 char pop(void)
 {
+	assert(!is_empty());
 
 	return stack[top--];
 }
@@ -148,6 +94,14 @@ int is_empty(void)
 {
 
 	return (top == -1);// return 1 if empty; return 0 if not empty;
+}
+
+int CheckMatching(element* buf)
+{
+
+
+
+	return 1;
 }
 
 void ClearStack(void)
