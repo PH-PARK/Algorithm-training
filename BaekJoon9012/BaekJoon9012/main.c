@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <assert.h>
 
-#define __DEBUG__
+//#define __DEBUG__
 #define maxLen 50
 #define minLen 2
 
@@ -10,8 +10,9 @@ void push(char);
 char pop(void);
 int is_empty(void);
 int is_full(void);
-int CheckMatching(element* buf);
+void CheckMatching(char *buf);
 void ClearStack(void);
+//void ClearString();
 
 typedef char element;
 
@@ -21,7 +22,7 @@ int top = -1;
 int main()
 {
 	int i, j;
-	element string[maxLen];
+	char string[maxLen];
 	int NumOfTest;
 	char tem = 0;
 
@@ -43,17 +44,17 @@ int main()
 
 		for (j = 0; j < maxLen; j++)
 		{
-			//	fflush(stdout);
-			scanf_s(" %s", string);
+			while (getchar() != '\n'); //Clear Buffer
+			scanf("%s",string,maxLen);
 #ifdef __DEBUG__
-			printf("sting is : %s", string);
+			printf("String is : %s\n", string);
+			puts("Start Checking");
 #endif
 
 			CheckMatching(string);
 
 #ifdef __DEBUG__
 			puts("One loop is done.");
-
 #endif
 			ClearStack();
 
@@ -96,12 +97,71 @@ int is_empty(void)
 	return (top == -1);// return 1 if empty; return 0 if not empty;
 }
 
-int CheckMatching(element* buf)
+void CheckMatching(char *buf)
 {
+	element tem = 0;
+	uint8_t i = 0;
+	uint8_t NumOfClose=0;
+
+#ifdef __DEBUG__
+	printf("buf is : %s\n", buf);
+#endif
+
+	while (buf[i] != '\0')
+	{
 
 
+		tem = buf[i];
+#ifdef __DEBUG__
+		printf("tem is %c\n", buf[i]);
+#endif
 
-	return 1;
+		if (tem == 40)//"(")
+		{
+#ifdef __DEBUG__
+			puts("This Char is (");
+#endif
+			push(tem);
+
+		}
+		else if (tem == 41)//")")
+		{
+#ifdef __DEBUG__
+			puts("This Char is )");
+#endif
+
+			if (is_empty() == 1)
+			{
+				puts("NO");
+				return;
+				//break; //Failed this time.
+			}
+			else//if it is not empty;
+			{
+				pop();
+				NumOfClose++;
+			}
+		}
+
+		else//if(tem !=( && !=))
+		{
+			puts("Wrong Char");
+			break;
+		}
+		i++;
+	}
+	if (is_empty() == 1 && NumOfClose>0) 
+	{
+		puts("YES");
+		return;
+	}
+	else
+	{
+		puts("NO");
+		return;
+	}
+
+	return;
 }
 
 void ClearStack(void)
