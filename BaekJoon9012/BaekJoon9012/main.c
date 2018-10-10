@@ -116,7 +116,7 @@ void CheckMatching(char *buf)
 		printf("tem is %c\n", buf[i]);
 #endif
 
-		if (tem == 40)//"(")
+		if (tem == '(')//40)//"(")
 		{
 #ifdef __DEBUG__
 			puts("This Char is (");
@@ -124,7 +124,7 @@ void CheckMatching(char *buf)
 			push(tem);
 
 		}
-		else if (tem == 41)//")")
+		else if (tem == ')')//41)//")")
 		{
 #ifdef __DEBUG__
 			puts("This Char is )");
