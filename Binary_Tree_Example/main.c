@@ -7,6 +7,8 @@ typedef struct node
 	struct node *leftChild, *rightChild;
 } treeNode;
 
+treeNode *gRoot = NULL;
+
 treeNode *makeBTreeNode(int key)
 {
 	treeNode *ptr = (treeNode *)malloc(sizeof(treeNode));
@@ -45,6 +47,30 @@ void postorder(treeNode *root) // left right root ¼ø¼­
 		printf("%d ", root ->key);
 	}
 }
+void isert_BST(int key)
+{
+	treeNode *pPre, *pLoc;
+	treeNode *pNew;
+
+	pPre = NULL;
+	pLoc = gRoot;
+	while (pLoc)
+	{
+		if (key == pLoc->key)
+			return;
+		pPre = pLoc;
+		pLoc = 
+	}
+}
+
+treeNode *search_BST(treeNode *root, int targetKey)
+{
+	if (!root) return NULL;
+	if (targetKey == root->key) return root;
+	if (targetKey < root->key)
+		return search_BST(root->leftChild, targetKey);
+	return search_BST(root->rightChild, targetKey);
+}
 
 int main(void)
 {
@@ -56,12 +82,15 @@ int main(void)
 	bt1->rightChild = bt3;
 	bt2->leftChild = bt4;
 
+
+
 	preorder(bt1);
 	puts("");
 	inorder(bt1);
 	puts("");
 	postorder(bt1);
 	puts("");
+
 	system("pause");
 	return 0;
 }
