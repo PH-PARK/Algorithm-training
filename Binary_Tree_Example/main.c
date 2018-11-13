@@ -36,7 +36,7 @@ treeNode* queue[MAX_SIZE];
 
 int main(void)
 {
-	
+	/*
 	treeNode *bt1 = makeBTreeNode(10);
 	treeNode *bt2 = makeBTreeNode(8);
 	treeNode *bt3 = makeBTreeNode(12);
@@ -56,7 +56,10 @@ int main(void)
 	puts("");
 
 	temp = search_BST(bt1, 4);
-	printf("%d, %d ",temp->key, temp);
+	printf("%d, %d ",temp->key, temp);*/
+
+
+
 
 
 	system("pause");
