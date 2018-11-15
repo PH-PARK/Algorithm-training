@@ -1,10 +1,12 @@
+//studentroll@gmail.com
+//20141200 ¹ÚÆòÈ­
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
-#define MAX_NODE 26
-#define MAX_QUEUE 10
-#define __DEBUG__
+#define MAX_NODE 30
+#define BUFSIZE 30
+//#define __DEBUG__
 
 typedef struct _STreeNode
 {
@@ -13,27 +15,40 @@ typedef struct _STreeNode
 }STreeNode;
 STreeNode* gRoot;
 
-char queue[MAX_QUEUE];
-int front, rear = 0;
+STreeNode* queue[MAX_NODE];
 
-void InsertBT(char, char, char);
+
+void InsertBT(STreeNode*, char, char);
 void PreOrder(STreeNode*);
 void InOrder(STreeNode*);
 void PostOrder(STreeNode*);
-STreeNode* SearchTarget(STreeNode*, char);
-void enqueue(char);
-char dequeue();
+STreeNode* dequeue();
+void enqueue(STreeNode* item);
 int IsEmpty();
 int GetString(char*, int);
 STreeNode* makeBTreeNode(char);
+int front = 0;
+int rear = 0;
 
 int main() 
 {
 	gRoot = makeBTreeNode('A');
 	int nodeNum = 1;
-	int i;
+	int i,j, k;
 	char temp, tempRoot, tempLeft, tempRight;
-	char buf[10];
+	STreeNode* ptrRoot, *ptrLeft, *ptrRight;
+	char buf[BUFSIZE];
+
+	temp = 0;
+	tempRoot = 0;
+	tempLeft = 0;
+	tempRight = 0;
+	i = 0;
+	j = 0;
+	k = 0;
+	ptrRoot = NULL;
+	ptrLeft = NULL;
+	ptrRight = NULL;
 
 #ifdef __DEBUG__
 	puts("Number of Nodes.");
@@ -41,99 +56,230 @@ int main()
 	scanf(" %d", &nodeNum);
 	
 
-	if (nodeNum < 1 || nodeNum>26)
+//	if (nodeNum < 1 || nodeNum>26)
+//	{
+//		puts("Wrong Num.");
+//		return 0;
+//	}
+
+#ifdef __DEBUG__
+	printf("nodeNum: %d\n", nodeNum);
+#endif
+	//getchar();
+	while (getchar() != '\n');
+#ifdef __DEBUG__
+	puts("Nodes: ");
+#endif
+
+	//*************************
+	//first enter
+	//*************************
+
+	if (GetString(buf, BUFSIZE) == 1)
 	{
-		puts("Wrong Num.");
+		return 0;
+	}
+
+	for (i = 0; buf[i] != '\0'; i++)
+	{
+
+		if (buf[i] != ' ')
+		{
+			if (j == 0)
+			{
+				tempRoot = buf[i];
+				j++;
+			}
+			else if (j == 1)
+			{
+				if (buf[i] == '.')
+				{
+					tempLeft = 0;
+				}
+				else
+				{
+					tempLeft = buf[i];
+					ptrLeft = makeBTreeNode(tempLeft);
+					enqueue(ptrLeft);
+					nodeNum--;
+				}
+				j++;
+			}
+			else if (j == 2)
+			{
+				if (buf[i] == '.')
+				{
+					tempRight = 0;
+				}
+				else
+				{
+					tempRight = buf[i];
+					ptrRight = makeBTreeNode(tempRight);
+					enqueue(ptrRight);
+					nodeNum--;
+				}
+				j = 0;
+			}
+		}
+#ifdef __DEBUG__
+		printf("root: %c, left: %c, right: %c\n", tempRoot, tempLeft, tempRight);
+#endif
+	}
+
+	if (tempLeft)
+	{
+		gRoot->leftChild = ptrLeft;
+	}
+	if (tempRight)
+	{
+		gRoot->rightChild = ptrRight;
+	}
+
+	if (nodeNum == 1 && IsEmpty())
+	{
+		PreOrder(gRoot);
+		puts("");
+		InOrder(gRoot);
+		puts("");
+		PostOrder(gRoot);
+		puts("");
 		return 0;
 	}
 
 #ifdef __DEBUG__
-		printf("nodeNum : %d\n", nodeNum);
+	puts("*****************");
+	puts("After First Case");
+	printf("front: %d, rear: %d\n", front, rear);
+	puts("In the Queue:");
+	for (k = front; k < rear; k++)
+	{
+		printf("%c", queue[k + 1]->item);
+	}
+	puts("");
+	//		printf("In the Queue : %c, %c\n", queue[front + 1]->item, queue[front + 2]->item);
+	puts("*****************");
 #endif
 
-		while (1 < nodeNum)
+
+	//***************************************
+	//	LOOP
+	//***************************************
+#ifdef __DEBUG__
+	puts("*******************");
+	puts("LOOP");
+	puts("*******************");
+#endif
+	while (!IsEmpty())
+	{
+	//	j = 0;
+
+		if (GetString(buf, BUFSIZE) == 1)	//Get a String Line.
 		{
+			return 0;
+		}
 
-			//		if (GetString(buf, 6) == 1)
-			//		{
-			//			return 1;
-			//		}
-			getchar();
-			scanf("%[^\n]", buf);
+		for (i = 0; buf[i] != '\0'; i++)	//Distinguish a String, removing ' '.
+		{
 #ifdef __DEBUG__
-			puts("scanf");
+			printf("buf[i]: %c, j: %d\n", buf[i],j);
 #endif
-			for (i = 0; i < 10; i++)
+			if (buf[i] != ' ')
 			{
-
-				if (buf[i] == '\0')
+				if (j == 0)
 				{
-#ifdef __DEBUG__
-					printf("1:%c 2:%c 3:%c 4:%c 5:%c %\n", buf[0], buf[1], buf[2], buf[3], buf[4]);
-					printf("buf[%d] : '%c'\n", i, buf[i]);
-					puts("break");
-#endif
-					break;
+					tempRoot = buf[i];
+					j++;
 				}
-
-				if (buf[i] != ' ')
+				else if (j == 1)
 				{
-					enqueue(buf[i]);
-#ifdef __DEBUG__
-					puts("enqueue");
-#endif
+					if (buf[i] == '.')	//ignore '.'
+					{
+						tempLeft = 0;
+					}
+					else				//makeTreeNode and remember the pointer.
+					{
+						tempLeft = buf[i];
+						ptrLeft = makeBTreeNode(tempLeft);
+						enqueue(ptrLeft);
+						nodeNum--;
+					}
+					j++;
 				}
-
+				else if (j == 2)
+				{
+					if (buf[i] == '.')
+					{
+						tempRight = 0;
+					}
+					else
+					{
+						tempRight = buf[i];
+						ptrRight = makeBTreeNode(tempRight);
+						enqueue(ptrRight);
+						nodeNum--;
+					}
+					j = 0;
+				}
 			}
-			tempRoot = dequeue();
 #ifdef __DEBUG__
-			puts("dequeue 1");
-#endif
-			temp = dequeue();
-#ifdef __DEBUG__
-			puts("dequeue 2");
-#endif
-			if (temp != '.')
-			{
-				tempLeft = temp;
-				nodeNum--;
-			}
-			else
-			{
-#ifdef __DEBUG__
-				puts("but was '.'");
-#endif
-				tempLeft = NULL;
-			}
-
-			temp = dequeue();
-#ifdef __DEBUG__
-			puts("dequeue 3");
-#endif
-			if (temp != '.')
-			{
-				tempRight = temp;
-				nodeNum--;
-			}
-			else
-			{
-				tempRight = NULL;
-#ifdef __DEBUG__
-				puts("but was '.'");
-#endif
-			}
-
-			while (!IsEmpty())
-			{
-				dequeue();
-			}
-
-			InsertBT(tempRoot, tempLeft, tempRight);
-#ifdef __DEBUG__
-			puts("Insert");
+			printf("root: %c, left: %c, right: %c\n", tempRoot, tempLeft, tempRight);
 #endif
 		}
-		
+#ifdef __DEBUG__
+		puts("In the Queue:");
+		for (k = front; k<rear; k++)
+		{
+			printf("%c", queue[k + 1]->item);
+		}
+		puts("");
+//		printf("In the Queue : %c, %c\n", queue[front+1]->item, queue[front+2]->item);
+#endif
+		ptrRoot = dequeue();
+#ifdef __DEBUG__
+		printf("tempRoot : %c, ptrRoot->item: %c\n", tempRoot, ptrRoot->item);
+#endif
+		k = 0;
+		while (tempRoot != ptrRoot->item)
+		{
+			enqueue(ptrRoot);
+			ptrRoot = dequeue();
+			k++;
+			if (k > MAX_NODE)
+			{
+				puts("Can't find Root.");
+				return 0;
+			}
+#ifdef __DEBUG__
+			printf("tempRoot : %c, ptrRoot->item: %c\n", tempRoot, ptrRoot->item);
+#endif
+		}
+
+
+
+		if (tempLeft)
+		{
+			ptrRoot->leftChild = ptrLeft;
+		}
+		if (tempRight)
+		{
+			ptrRoot->rightChild = ptrRight;
+		}
+#ifdef __DEBUG__
+		puts("*****************");
+		puts("Passed One LOOP");
+		printf("front: %d, rear: %d\n", front, rear);
+		puts("In the Queue:");
+		for (k = front; k < rear; k++)
+		{
+			printf("%c", queue[k + 1]->item);
+		}
+		puts("");
+//		printf("In the Queue : %c, %c\n", queue[front + 1]->item, queue[front + 2]->item);
+		puts("*****************");
+#endif
+
+	}
+
 	PreOrder(gRoot);
 	puts("");
 	InOrder(gRoot);
@@ -144,81 +290,22 @@ int main()
 	return 0;
 }
 
-void InsertBT(char target, char left, char right)
+void InsertBT(STreeNode* root, char leftkey, char rightkey)
 {
-	STreeNode* temp;
 
-	if (target == gRoot->item)
+	if (leftkey)
 	{
-		if (left)
-		{
-			gRoot->leftChild = makeBTreeNode(left);
-#ifdef __DEBUG__
-			puts("left1");
-#endif
-		}
-		if (right)
-		{
-			gRoot->rightChild = makeBTreeNode(right);
-#ifdef __DEBUG__
-			puts("right1");
-#endif
-		}
-		return;
+		root->leftChild = makeBTreeNode(leftkey);
 	}
-	
 
-	temp = SearchTarget(gRoot, target);
-
-	if (left)
+	if (rightkey)
 	{
-		temp->leftChild = makeBTreeNode(left);
-#ifdef __DEBUG__
-		puts("left2");
-#endif
-	}
-	if (right)
-	{
-		temp->rightChild = makeBTreeNode(right);
-#ifdef __DEBUG__
-		puts("right2");
-#endif
+		root->rightChild = makeBTreeNode(rightkey);
 	}
 
 	return;
 }
 
-
-STreeNode* SearchTarget(STreeNode* root, char target)
-{
-	static STreeNode* returnptr;
-	if (root->item == target)
-	{
-#ifdef __DEBUG__
-		puts("found in %c's item",root->item);
-#endif
-
-		return root;
-
-	}
-	if (root->leftChild)
-	{
-		SearchTarget(root->leftChild, target);
-#ifdef __DEBUG__
-		puts("finding %c's left",root->item);
-#endif
-
-	}
-
-	if (root->rightChild)
-	{
-		SearchTarget(root->rightChild, target);
-#ifdef __DEBUG__
-		puts("finding %c's right",root->item);
-#endif
-	}
-
-}
 STreeNode *makeBTreeNode(char key)
 {
 	STreeNode *ptr = (STreeNode *)malloc(sizeof(STreeNode));
@@ -227,7 +314,7 @@ STreeNode *makeBTreeNode(char key)
 	ptr->leftChild = ptr->rightChild = NULL;
 
 	return ptr;
-}
+}	
 
 void PreOrder(STreeNode *root) // root left right
 {
@@ -259,20 +346,6 @@ void PostOrder(STreeNode *root) // left right root
 	}
 }
 
-void enqueue(char item)
-{
-	rear = (rear + 1) % MAX_QUEUE;
-	queue[rear] = item;
-	return;
-}
-
-char dequeue()
-{
-	front = (front + 1) % MAX_QUEUE;
-
-	return queue[front];
-}
-
 int GetString(char *buf, int maxLen)
 {
 	int i;
@@ -290,11 +363,24 @@ int GetString(char *buf, int maxLen)
 	}
 	puts("Too long string");
 	printf("Maximum	input length is %d bytes.", maxLen - 1);
-	while (getchar());
+	while (getchar() != '\n');
 	return	1;
 }
 
 int IsEmpty()
 {
-	return (rear == front);
+	return (front == rear);
+}
+
+void enqueue(STreeNode* item)
+{
+	rear = (rear + 1) % MAX_NODE;
+	queue[rear] = item;
+	return;
+}
+
+STreeNode* dequeue()
+{
+	front = (front + 1) % MAX_NODE;
+	return queue[front];
 }
